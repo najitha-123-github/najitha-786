@@ -1,0 +1,237 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Oct 06, 2024 at 11:16 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `canteen`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `login`
+--
+
+CREATE TABLE `login` (
+  `email` varchar(35) NOT NULL,
+  `password` varchar(30) NOT NULL,
+  `usercode` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `login`
+--
+
+INSERT INTO `login` (`email`, `password`, `usercode`) VALUES
+('aparna@gmail.com', 'asd', 0),
+('admin@gmail.com', 'admin123', 3),
+('famis833@gmail.com', 'famis', 1),
+('arya@123', 'aryasree@123', 0),
+('swalih@gmail.com', 'swalih39', 1),
+('arya123@gmail.com', 'aryasree', 1),
+('meenu@gmail.com', 'adhrijmanu', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `menu`
+--
+
+CREATE TABLE `menu` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `category` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `image` varchar(40) NOT NULL,
+  `quantity` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `menu`
+--
+
+INSERT INTO `menu` (`id`, `name`, `description`, `price`, `category`, `created_at`, `updated_at`, `image`, `quantity`) VALUES
+(4, 'ghee rice', 'rice made with ghee and free gravy', 30.00, 'Lunch', '2024-09-26 08:06:13', '2024-09-26 08:06:13', 'uploads/54673082.webp', 100),
+(6, 'Chicken Biriyani', 'Long-grained rice (like basmati) flavored with fragrant spices such as saffron and layered with chicken and a thick gravy.', 50.00, 'Lunch', '2024-09-28 15:47:13', '2024-09-28 15:47:13', 'uploads/Chicken-Biryani.jpg', 150),
+(7, 'Dosa', 'plain dosa with sambar,chatni.', 30.00, 'Breakfast', '2024-09-28 15:54:37', '2024-09-28 15:54:37', 'uploads/dosa.jpg', 100),
+(8, 'Idali', 'Idali with sambar and chatni.', 30.00, 'Breakfast', '2024-09-28 15:59:08', '2024-09-28 15:59:08', 'uploads/idali.jpg', 100),
+(9, 'porotta', 'porotta with chicken or beef curry.', 50.00, 'Others', '2024-09-28 16:03:32', '2024-09-28 16:03:32', 'uploads/porotta.jpg', 150),
+(11, 'vada', 'uzhunnu vada soft on the inside and crispy on the outside.', 20.00, 'Snacks', '2024-09-28 16:13:01', '2024-09-28 16:13:01', 'uploads/vada.jpg', 2),
+(12, 'Masala-Dosa', 'Super crispy masala-dosa with side dishes like sambar,chatni,potato masala.', 50.00, 'Breakfast', '2024-09-28 16:22:41', '2024-09-28 16:22:41', 'uploads/Masala-Dosa.jpg', 1),
+(13, 'puttu', 'puttu with kadala curry or egg curry.', 30.00, 'Drinks', '2024-09-28 16:25:37', '2024-09-28 16:25:37', 'uploads/puttu-kadala.jpg', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `items` text NOT NULL,
+  `total_price` decimal(10,2) NOT NULL,
+  `status` enum('pending','in_progress','completed') DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `staff`
+--
+
+CREATE TABLE `staff` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `active` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `spass` varchar(40) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `staff`
+--
+
+INSERT INTO `staff` (`id`, `name`, `email`, `active`, `created_at`, `spass`) VALUES
+(4, 'famis', 'famis833@gmail.com', 0, '2024-09-26 07:27:44', 'asddf'),
+(5, 'swalih', 'swalih@gmail.com', 1, '2024-09-26 09:44:37', 'swalih39'),
+(6, 'arya', 'arya123@gmail.com', 1, '2024-09-28 16:28:54', 'aryasree');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tables`
+--
+
+CREATE TABLE `tables` (
+  `id` int(11) NOT NULL,
+  `table_num` int(11) NOT NULL,
+  `capacity` int(11) NOT NULL,
+  `status` enum('booked','unbooked') NOT NULL DEFAULT 'unbooked'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tables`
+--
+
+INSERT INTO `tables` (`id`, `table_num`, `capacity`, `status`) VALUES
+(1, 101, 5, 'unbooked'),
+(4, 104, 0, 'unbooked');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `name` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `phno` int(15) NOT NULL,
+  `password` varchar(30) NOT NULL,
+  `usertype` varchar(30) NOT NULL,
+  `userid` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`name`, `email`, `phno`, `password`, `usertype`, `userid`) VALUES
+('arya', 'arya@123', 2147483647, 'aryasree@123', 'Students', 4),
+('meenu manu', 'meenu@gmail.com', 2147483647, 'adhrijmanu', 'Teaching Staff', 5);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `menu`
+--
+ALTER TABLE `menu`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `staff`
+--
+ALTER TABLE `staff`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
+
+--
+-- Indexes for table `tables`
+--
+ALTER TABLE `tables`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`userid`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `menu`
+--
+ALTER TABLE `menu`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `staff`
+--
+ALTER TABLE `staff`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `tables`
+--
+ALTER TABLE `tables`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `userid` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
